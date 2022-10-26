@@ -12,8 +12,15 @@ void echo(int connfd)
 
     Rio_readinitb(&rio, connfd);
     while((n = Rio_readlineb(&rio, buf, MAXLINE)) != 0) { //line:netp:echo:eof
-		printf("server received %d bytes\n", (int)n);
-		Rio_writen(connfd, buf, n);
+      if(strcmp("ping\n", buf) == 0){
+        printf("before pong\n");
+        Rio_writen(connfd, "pong\n", n);
+        printf("after pong\n");
+      } else {
+        printf("before bad\n");
+        Rio_writen(connfd, "BAD REQUEST\n", 12);
+        printf("after bad\n");
+      }
     }
 }
 /* $end echo */
